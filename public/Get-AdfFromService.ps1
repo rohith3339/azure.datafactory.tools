@@ -28,7 +28,7 @@ function Get-AdfFromService {
     )
     Write-Debug "BEGIN: Get-AdfFromService(FactoryName=$FactoryName, ResourceGroupName=$ResourceGroupName)"
 
-    $adf = New-Object -TypeName AdfInstance
+    $adf = New-Object -TypeName "SQLPlayer.AdfTools.AdfInstance"
     $adf.Name = $FactoryName
     $adf.ResourceGroupName = $ResourceGroupName
 
@@ -36,8 +36,11 @@ function Get-AdfFromService {
     Write-Host ("Azure Data Factory (instance) loaded." -f $adf.DataSets.Count)
     $adf.Id = $adfi.DataFactoryId
     $adf.Location = $adfi.Location
+    $adf.Name = $adfi.DataFactoryName
 
+    #$ds = Get-AzDataFactoryV2Dataset -ResourceGroupName "$ResourceGroupName" -DataFactoryName "$DataFactoryName" | ToArray
     $adf.DataSets = Get-AzDataFactoryV2Dataset -ResourceGroupName "$ResourceGroupName" -DataFactoryName "$DataFactoryName" | ToArray
+    #$adf.DataSets.AddRange($ds)
     Write-Host ("DataSets: {0} object(s) loaded." -f $adf.DataSets.Count)
     $adf.IntegrationRuntimes = Get-AzDataFactoryV2IntegrationRuntime -ResourceGroupName "$ResourceGroupName" -DataFactoryName "$DataFactoryName" | ToArray
     Write-Host ("IntegrationRuntimes: {0} object(s) loaded." -f $adf.IntegrationRuntimes.Count)

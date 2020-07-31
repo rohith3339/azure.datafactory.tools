@@ -14,6 +14,18 @@ if ($true -and ($PSEdition -eq 'Desktop'))
     }
 }
 
+
+#region Types
+if (-not ([System.Management.Automation.PSTypeName]'CosmosDB.Context').Type)
+{
+    $typeDefinitionPath = Join-Path -Path "$PSScriptRoot\private\classes" -ChildPath 'adftools.cs'
+    $typeDefinition = Get-Content -Path $typeDefinitionPath -Raw
+    Add-Type -TypeDefinition $typeDefinition
+}
+#endregion
+
+
+
 if (Test-Path -Path "$PSScriptRoot\private" -ErrorAction Ignore)
 {
     Get-ChildItem "$PSScriptRoot\private" -ErrorAction Stop | Where-Object { $_.Extension -eq '.ps1' } | ForEach-Object {
