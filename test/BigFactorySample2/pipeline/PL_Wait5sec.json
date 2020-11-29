@@ -3,18 +3,53 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Wait5",
-				"type": "Wait",
+				"name": "If Condition1",
+				"type": "IfCondition",
 				"dependsOn": [],
 				"userProperties": [],
 				"typeProperties": {
-					"waitTimeInSeconds": {
-						"value": "@pipeline().globalParameters.GP-Int",
+					"expression": {
+						"value": "@equals(pipeline().parameters.WantWait, 1)",
 						"type": "Expression"
-					}
+					},
+					"ifTrueActivities": [
+						{
+							"name": "Wait5",
+							"type": "Wait",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"waitTimeInSeconds": {
+									"value": "@pipeline().globalParameters.GP-Int",
+									"type": "Expression",
+									"ifTrueActivities": [
+										{
+											"name": "Wait5",
+											"type": "Wait",
+											"dependsOn": [],
+											"userProperties": [],
+											"typeProperties": {
+												"waitTimeInSeconds": {
+													"value": "@pipeline().globalParameters.GP-Int",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+				
+								}
+							}
+						}
+					]
 				}
 			}
 		],
+		"parameters": {
+			"WantWait": {
+				"type": "string",
+				"defaultValue": "1"
+			}
+		},
 		"annotations": []
 	}
 }
